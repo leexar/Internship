@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Page Title</title>
+
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+    <style>
+        body {
+            font-family: Helvetica;
+        }
+        #root{
+            width: 300px;
+        }
+        .todo-item{
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 10px;
+        }
+
+        .todo-item[completed] div{
+            font-style: italic;
+            text-decoration: line-through;
+        }
+
+        #todo-input{
+            border: 1px solid #CCC;
+            border-radius: 5px;
+        }
+
+        .complete-button, .uncomplete-button, .delete-button{
+            border: 1px solid black;
+            border-radius: 5px;
+        }
+
+        .complete-button{
+            background-color: green; 
+        }
+
+        .delete-button{
+            background-color: red;
+        }
+
+        .uncomplete-button{
+            background-color: blueviolet;
+        }
+    </style>
+</head>
+<body>
+    <div id="root">
+        <div>
+            <div class="todo-item" v-for="todo in todos" :key="todo.id">
+                <div>{{ todo.text }}</div>
+                <button class="complete-button" @click="ToggleComplete(event,todo)" v-if="!todo.completed">Complete</button>
+                <button @click="ToggleComplete(event,todo)" v-if="todo.completed" class="uncomplete-button">Uncomplete</button>
+                <button class="delete-button" @click="DeleteTodo(todo)">Delete</button>
+            </div>
+        </div>
+        <div>
+            <input type="text" name="" id="todo-input">
+            <button @click="AddTodo">Add todo</button>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+            new Vue({
+                el: "#root",
+                data: {
+                    lastID: 4,
+                    todos: [
+                        { id: 1, text: "todo-1", completed: false },
+                        { id: 2, text: "todo-2", completed: false },
+                        { id: 3, text: "todo-3", completed: false },
+                        { id: 4, text: "todo-4", completed: false },
+                    ]
+                },
+                methods:{
+                    AddTodo(){
+                        let input = document.querySelector("#todo-input");
+                        this.todos.push({ id: ++this.lastID, text: input.value, completed: false });
+                        input.value = "";
+                    },
+                    ToggleComplete(e, todo){
+                        todo.completed = !todo.completed;
+
+                        if(todo.completed)
+                            e.currentTarget.parentNode.setAttribute("completed", "");
+                        else
+                            e.currentTarget.parentNode.removeAttribute("completed");
+                    },
+                    DeleteTodo(todo){
+                        this.todos = this.todos.filter(item => item !== todo);
+                    }
+                }
+            });
+    </script>
+</body>
+</html>
