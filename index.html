@@ -13,9 +13,33 @@
         body {
             font-family: Helvetica;
         }
+
         #root{
-            width: 300px;
+            width: 312px;
+            height: 560px;
         }
+
+        .todo-list_header, .todo-list_add-panel{
+            width: 100%;
+            display: flex;
+        }
+
+        .todo-list_header{
+            justify-content: space-between;
+            max-height: 50px;
+            border-bottom: 1px solid black;
+            margin-bottom: 15px;
+        }
+        
+        h3, h2{
+            padding: 0 10px;
+        }
+
+        .todo-list_content{
+            max-height: 300px;
+            overflow: auto;
+        }
+
         .todo-item{
             display: flex;
             justify-content: space-around;
@@ -48,11 +72,26 @@
         .uncomplete-button{
             background-color: blueviolet;
         }
+
+        .todo-list_add-panel{
+            border-top: 1px solid black;
+            justify-content: space-around;
+            padding-top: 10px;
+        }
+
+        .todo-list_add-panel input{
+            padding: 3px;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
     <div id="root">
-        <div>
+        <div class="todo-list_header">
+            <h3>Todo list</h3>
+            <h2>{{todos.length}}</h2>
+        </div>
+        <div class="todo-list_content">
             <div class="todo-item" v-for="todo in todos" :key="todo.id">
                 <div>{{ todo.text }}</div>
                 <button class="complete-button" @click="ToggleComplete(event,todo)" v-if="!todo.completed">Complete</button>
@@ -60,7 +99,7 @@
                 <button class="delete-button" @click="DeleteTodo(todo)">Delete</button>
             </div>
         </div>
-        <div>
+        <div class="todo-list_add-panel">
             <input type="text" name="" id="todo-input">
             <button @click="AddTodo">Add todo</button>
         </div>
@@ -76,13 +115,26 @@
                         { id: 2, text: "todo-2", completed: false },
                         { id: 3, text: "todo-3", completed: false },
                         { id: 4, text: "todo-4", completed: false },
+                        { id: 5, text: "todo-1", completed: false },
+                        { id: 6, text: "todo-2", completed: false },
+                        { id: 7, text: "todo-3", completed: false },
+                        { id: 8, text: "todo-4", completed: false },
+                        { id: 9, text: "todo-1", completed: false },
+                        { id: 10, text: "todo-2", completed: false },
+                        { id: 11, text: "todo-3", completed: false },
+                        { id: 12, text: "todo-4", completed: false },
                     ]
                 },
                 methods:{
                     AddTodo(){
                         let input = document.querySelector("#todo-input");
-                        this.todos.push({ id: ++this.lastID, text: input.value, completed: false });
-                        input.value = "";
+                        if(!input.value)
+                            alert("Please enter todo's title");
+                        else
+                            {
+                                this.todos.push({ id: ++this.lastID, text: input.value, completed: false });
+                                input.value = "";
+                            }
                     },
                     ToggleComplete(e, todo){
                         todo.completed = !todo.completed;
